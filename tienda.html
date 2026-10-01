@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tienda · FINORA</title>
+<meta name="description" content="Catálogo completo de productos FINORA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+
+<div class="wrap">
+  <div class="page-head"><div class="crumbs"><a href="index.html">Inicio</a> / Tienda</div><h1 id="title">Tienda</h1><p id="count"></p></div>
+  <section class="section" style="padding-top:8px">
+    <div class="toolbar">
+      <div class="pills" id="pills"></div>
+      <select id="sort" aria-label="Ordenar productos">
+        <option value="">Destacados</option><option value="populares">Más populares</option><option value="nuevos">Más nuevos</option>
+        <option value="precio_asc">Precio: menor a mayor</option><option value="precio_desc">Precio: mayor a menor</option>
+      </select>
+    </div>
+    <div class="grid g4" id="list"></div>
+  </section>
+</div>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+const params = new URLSearchParams(location.search);
+const state = { cat: params.get('cat') || '', q: params.get('q') || '', sort: params.get('sort') || '' };
+async function load() {
+  const qs = new URLSearchParams();
+  if (state.cat) qs.set('category', state.cat);
+  if (state.q) qs.set('q', state.q);
+  if (state.sort) qs.set('sort', state.sort);
+  const list = document.getElementById('list');
+  try {
+    const items = await api('/api/products?' + qs);
+    document.getElementById('title').textContent = state.q ? `Resultados para "${state.q}"` : (state.cat || 'Tienda');
+    document.getElementById('count').textContent = items.length + (items.length === 1 ? ' producto' : ' productos');
+    list.innerHTML = items.length ? items.map(productCard).join('')
+      : '<div class="empty" style="grid-column:1/-1"><h3>No encontramos productos</h3><p>Prueba con otra categoría o palabra.</p></div>';
+  } catch (e) { list.innerHTML = '<p class="empty">No pudimos cargar los productos.</p>'; }
+}
+function pills(cats) {
+  const all = [{ name: '', label: 'Todos' }, ...cats.map(c => ({ name: c.name, label: c.name }))];
+  document.getElementById('pills').innerHTML = all.map(c => `<button class="pill ${c.name === state.cat ? 'on' : ''}" data-cat="${esc(c.name)}">${esc(c.label)}</button>`).join('');
+}
+Finora.ready.then(async () => {
+  const cats = await api('/api/categories');
+  pills(cats);
+  document.getElementById('sort').value = state.sort;
+  document.getElementById('pills').addEventListener('click', e => {
+    const b = e.target.closest('.pill'); if (!b) return;
+    state.cat = b.dataset.cat; state.q = '';
+    history.replaceState(null, '', state.cat ? '?cat=' + encodeURIComponent(state.cat) : location.pathname);
+    pills(cats); load();
+  });
+  document.getElementById('sort').addEventListener('change', e => { state.sort = e.target.value; load(); });
+  load();
+});
+
+</script>
+</body>
+</html>

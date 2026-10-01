@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contacto · FINORA</title>
+<meta name="description" content="Contáctanos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+
+<div class="wrap"><div class="page-head"><div class="crumbs"><a href="index.html">Inicio</a> / Contacto</div><h1>Contacto</h1><p>Escríbenos y te respondemos lo antes posible.</p></div>
+<section class="section" style="padding-top:10px"><div class="two">
+  <form class="panel" id="f"><div id="m" class="msg" hidden></div>
+    <div class="row2"><div class="field"><label for="n">Nombre</label><input id="n" required></div><div class="field"><label for="e">Correo</label><input id="e" type="email" required></div></div>
+    <div class="field"><label for="t">Mensaje</label><textarea id="t" required></textarea></div>
+    <button class="btn btn-gold">Enviar mensaje</button></form>
+  <aside class="panel"><h2>Otras formas de contacto</h2>
+    <p style="font-size:13.5px;line-height:1.8">Atención de lunes a sábado<br>9:00 a. m. a 7:00 p. m.</p>
+    <a class="btn btn-dark block" id="wa" style="margin-top:16px" target="_blank" rel="noopener">Escribir por WhatsApp</a></aside></div></section></div>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+Finora.ready.then(() => {
+  document.getElementById('wa').href = 'https://wa.me/' + Finora.config.whatsapp + '?text=' + encodeURIComponent('Hola FINORA, quisiera más información.');
+  document.getElementById('f').onsubmit = ev => {
+    ev.preventDefault(); const m = document.getElementById('m');
+    window.open(waLink('Hola FINORA, soy ' + n.value + ' (' + e.value + '). ' + t.value), '_blank'); m.className = 'msg ok'; m.textContent = 'Se abrió WhatsApp para enviar tu mensaje.'; t.value = '';
+    m.hidden = false;
+  };
+});
+
+</script>
+</body>
+</html>

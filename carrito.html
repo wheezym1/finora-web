@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrito · FINORA</title>
+<meta name="description" content="Revisa tu carrito.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+
+<div class="wrap"><div class="page-head"><div class="crumbs"><a href="index.html">Inicio</a> / Carrito</div><h1>Tu carrito</h1></div>
+<section class="section" style="padding-top:10px"><div id="cartBox"></div></section></div>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+async function draw() {
+  const cart = Cart.get(); const box = document.getElementById('cartBox');
+  if (!cart.length) { box.innerHTML = '<div class="panel empty"><h3>Tu carrito está vacío</h3><p style="margin-bottom:18px">Explora la tienda y agrega tus favoritos.</p><a class="btn btn-gold" href="tienda.html">Ir a la tienda</a></div>'; return; }
+  const rows = [];
+  for (const it of cart) {
+    try { const p = await api('/api/products/' + it.id); rows.push({ p, qty: Math.min(it.qty, Math.max(p.stock, 0)) }); }
+    catch { Cart.set(it.id, 0); }
+  }
+  const valid = rows.filter(r => r.qty > 0);
+  rows.filter(r => r.qty === 0).forEach(r => Cart.set(r.p.id, 0));
+  if (!valid.length) return draw();
+  valid.forEach(r => Cart.set(r.p.id, r.qty));
+  const subtotal = valid.reduce((a, r) => a + r.p.price * r.qty, 0);
+  const cfg = Finora.config; const ship = subtotal >= cfg.freeShippingFrom ? 0 : cfg.shippingCost;
+  box.innerHTML = `<div class="two">
+    <div class="panel">${valid.map(({ p, qty }) => `
+      <div class="line">
+        <a href="producto.html?id=${p.id}"><img src="${esc(p.image)}" alt="${esc(p.name)}"></a>
+        <div><h4>${esc(p.name)}</h4><div class="sub">${money(p.price)} c/u</div>
+          <div style="margin-top:8px;display:flex;align-items:center"><div class="qty"><button data-m="${p.id}" aria-label="Menos">−</button><span>${qty}</span><button data-p="${p.id}" data-max="${Math.min(p.stock, 20)}" aria-label="Más">+</button></div><button class="rm" data-r="${p.id}">Quitar</button></div></div>
+        <div class="tot">${money(p.price * qty)}</div></div>`).join('')}</div>
+    <aside class="panel"><h2>Resumen</h2>
+      <div class="sum-row"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+      <div class="sum-row"><span>Envío</span><span>${ship ? money(ship) : 'Gratis'}</span></div>
+      <div class="sum-row total"><span>Total</span><span>${money(subtotal + ship)}</span></div>
+      ${ship ? `<p class="note">Te faltan ${money(cfg.freeShippingFrom - subtotal)} para envío gratis.</p>` : ''}
+      <a class="btn btn-gold block" style="margin-top:18px" href="checkout.html">Continuar con la compra</a>
+      <a class="btn btn-line block" style="margin-top:10px" href="tienda.html">Seguir comprando</a></aside></div>`;
+  const cur = id => Cart.get().find(i => i.id === id).qty;
+  box.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { Cart.set(+b.dataset.m, cur(+b.dataset.m) - 1); draw(); });
+  box.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { Cart.set(+b.dataset.p, Math.min(+b.dataset.max, cur(+b.dataset.p) + 1)); draw(); });
+  box.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { Cart.set(+b.dataset.r, 0); draw(); });
+}
+Finora.ready.then(draw);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Producto · FINORA</title>
+<meta name="description" content="Detalle del producto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+
+<div class="wrap"><div class="page-head" style="padding-bottom:0"><div class="crumbs"><a href="index.html">Inicio</a> / <a href="tienda.html">Tienda</a> / <span id="crumbCat"></span></div></div>
+<section class="section" id="pdp"><div class="empty">Cargando…</div></section>
+<div id="relatedBox" hidden><div class="sec-head"><div><h2>También te puede gustar</h2></div></div><div class="grid g4" id="related"></div><div style="height:56px"></div></div>
+</div>
+
+</main>
+<div id="site-footer"></div>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+
+Finora.ready.then(async () => {
+  const id = new URLSearchParams(location.search).get('id');
+  const box = document.getElementById('pdp');
+  let p;
+  try { p = await api('/api/products/' + encodeURIComponent(id)); }
+  catch { box.innerHTML = '<div class="empty"><h3>Producto no encontrado</h3><a class="btn btn-dark" href="tienda.html">Volver a la tienda</a></div>'; return; }
+  document.title = p.name + ' · FINORA';
+  document.getElementById('crumbCat').innerHTML = `<a href="tienda.html?cat=${encodeURIComponent(p.category)}">${esc(p.category)}</a>`;
+  let qty = 1;
+  const stockTxt = p.stock <= 0 ? '<div class="stock none">Agotado</div>' : p.stock <= 5 ? `<div class="stock low">¡Últimas ${p.stock} unidades!</div>` : '<div class="stock ok">Disponible · envío en 24 a 72 h</div>';
+  box.innerHTML = `<div class="pdp">
+    <div class="big">${p.badge ? `<span class="tag">${esc(p.badge)}</span>` : ''}<img src="${esc(p.image)}" alt="${esc(p.name)}"></div>
+    <div>
+      <div style="font-size:12px;color:var(--muted)">${esc(p.category)}</div>
+      <h1>${esc(p.name)}</h1>${stars(p.rating, p.reviews)}
+      <div class="price">${money(p.price)}</div>
+      <p class="desc">${esc(p.description)}</p>${stockTxt}
+      <div class="buyrow">
+        <div class="qty"><button id="minus" aria-label="Menos">−</button><span id="q">1</span><button id="plus" aria-label="Más">+</button></div>
+        <button class="btn btn-gold" id="addBtn" ${p.stock <= 0 ? 'disabled' : ''}>Agregar al carrito</button>
+        <button class="btn btn-dark" id="buyBtn" ${p.stock <= 0 ? 'disabled' : ''}>Comprar ahora</button>
+      </div>
+      <div class="perks"><span>✓ Envíos a todo el Perú</span><span>✓ Paga con tarjeta, Yape o Plin</span><span>✓ Envío gratis desde ${money(Finora.config.freeShippingFrom || 150)}</span></div>
+    </div></div>`;
+  const q = document.getElementById('q');
+  const max = Math.min(p.stock, 20);
+  document.getElementById('minus').onclick = () => { qty = Math.max(1, qty - 1); q.textContent = qty; };
+  document.getElementById('plus').onclick = () => { qty = Math.min(max, qty + 1); q.textContent = qty; };
+  document.getElementById('addBtn').onclick = () => { Cart.add(p.id, qty, max); toast('Producto agregado al carrito'); };
+  document.getElementById('buyBtn').onclick = () => { Cart.add(p.id, qty, max); location.href = 'carrito.html'; };
+  const rel = (await api('/api/products?category=' + encodeURIComponent(p.category))).filter(x => x.id !== p.id).slice(0, 4);
+  if (rel.length) { document.getElementById('related').innerHTML = rel.map(productCard).join(''); document.getElementById('relatedBox').hidden = false; }
+});
+
+</script>
+</body>
+</html>
