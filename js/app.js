@@ -6,9 +6,9 @@ const money = n => 'S/ ' + Number(n).toLocaleString('es-PE', { minimumFractionDi
 
 /* ---------- Configuración (EDITA AQUÍ) ---------- */
 const CONFIG = {
-  whatsapp: '51999999999',     // tu WhatsApp con código de país, sin + ni espacios
-  yape: '999 999 999',
-  plin: '999 999 999',
+  whatsapp: '51900865945',     // tu WhatsApp con código de país, sin + ni espacios
+  yape: '900 865 945',
+  plin: '900 865 945',
   payee: 'FINORA',
   freeShippingFrom: 150,
   shippingCost: 12
