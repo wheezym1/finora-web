@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Producto · FINORA</title>
+<title>Producto · MySetUp</title>
 <meta name="description" content="Detalle del producto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,13 +25,13 @@
 <script src="js/app.js"></script>
 <script>
 
-Finora.ready.then(async () => {
+MySetUp.ready.then(async () => {
   const id = new URLSearchParams(location.search).get('id');
   const box = document.getElementById('pdp');
   let p;
   try { p = await api('/api/products/' + encodeURIComponent(id)); }
   catch { box.innerHTML = '<div class="empty"><h3>Producto no encontrado</h3><a class="btn btn-dark" href="tienda.html">Volver a la tienda</a></div>'; return; }
-  document.title = p.name + ' · FINORA';
+  document.title = p.name + ' · MySetUp';
   document.getElementById('crumbCat').innerHTML = `<a href="tienda.html?cat=${encodeURIComponent(p.category)}">${esc(p.category)}</a>`;
   let qty = 1;
   const stockTxt = p.stock <= 0 ? '<div class="stock none">Agotado</div>' : p.stock <= 5 ? `<div class="stock low">¡Últimas ${p.stock} unidades!</div>` : '<div class="stock ok">Disponible · envío en 24 a 72 h</div>';
@@ -47,7 +47,7 @@ Finora.ready.then(async () => {
         <button class="btn btn-gold" id="addBtn" ${p.stock <= 0 ? 'disabled' : ''}>Agregar al carrito</button>
         <button class="btn btn-dark" id="buyBtn" ${p.stock <= 0 ? 'disabled' : ''}>Comprar ahora</button>
       </div>
-      <div class="perks"><span>✓ Envíos a todo el Perú</span><span>✓ Paga con tarjeta, Yape o Plin</span><span>✓ Envío gratis desde ${money(Finora.config.freeShippingFrom || 150)}</span></div>
+      <div class="perks"><span>✓ Envíos a todo el Perú</span><span>✓ Paga con tarjeta, Yape o Plin</span><span>✓ Envío gratis desde ${money(MySetUp.config.freeShippingFrom || 150)}</span></div>
     </div></div>`;
   const q = document.getElementById('q');
   const max = Math.min(p.stock, 20);
