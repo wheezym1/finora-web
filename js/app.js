@@ -94,7 +94,7 @@ function renderChrome(user) {
   $('#site-header').innerHTML = `
   <div class="topbar"><div class="wrap"><span>Envíos a todo el Perú</span><span>Compra segura</span><span>Envío gratis desde S/ 150</span></div></div>
   <header class="site"><div class="wrap">
-    <a href="index.html" class="logo" aria-label="KISHI KISHI</b>MIAU MIAU inicio">${LOGO}</a>
+    <a href="index.html" class="logo" aria-label="KISHI</b> TEC inicio">${LOGO}</a>
     <nav class="main" id="nav">
       <a href="index.html" class="${act('index.html', 'index.html')}">Inicio</a>
       <a href="tienda.html" class="${act('tienda.html', 'producto.html')}">Tienda</a>
