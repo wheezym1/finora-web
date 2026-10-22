@@ -1,4 +1,4 @@
-/* FINORA · utilidades compartidas */
+/* MySetUp · utilidades compartidas */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -9,7 +9,7 @@ const CONFIG = {
   whatsapp: '51900865945',     // tu WhatsApp con código de país, sin + ni espacios
   yape: '900 865 945',
   plin: '900 865 945',
-  payee: 'FINORA',
+  payee: 'MySetUp',
   freeShippingFrom: 150,
   shippingCost: 12
 };
@@ -42,8 +42,8 @@ function waLink(text) { return 'https://wa.me/' + CONFIG.whatsapp + '?text=' + e
 
 /* ---------- Carrito (guardado en el navegador) ---------- */
 const Cart = {
-  get() { try { return JSON.parse(localStorage.getItem('finora_cart')) || []; } catch { return []; } },
-  save(c) { localStorage.setItem('finora_cart', JSON.stringify(c)); Cart.updateBadge(); },
+  get() { try { return JSON.parse(localStorage.getItem('MySetUp_cart')) || []; } catch { return []; } },
+  save(c) { localStorage.setItem('MySetUp_cart', JSON.stringify(c)); Cart.updateBadge(); },
   count() { return Cart.get().reduce((a, i) => a + i.qty, 0); },
   add(id, qty = 1, max = 20) {
     const c = Cart.get(); const it = c.find(i => i.id === id);
