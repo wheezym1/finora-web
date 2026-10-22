@@ -1,4 +1,4 @@
-# FINORA · versión HTML (sin servidor)
+# FINORA · versión HTML
 
 Sube el CONTENIDO de esta carpeta a un repositorio de GitHub y activa
 Settings → Pages → Branch: main / (root).
