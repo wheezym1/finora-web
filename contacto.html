@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Contacto · FINORA</title>
+<title>Contacto · MySetUp</title>
 <meta name="description" content="Contáctanos.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,11 +30,11 @@
 <script src="js/app.js"></script>
 <script>
 
-Finora.ready.then(() => {
-  document.getElementById('wa').href = 'https://wa.me/' + Finora.config.whatsapp + '?text=' + encodeURIComponent('Hola FINORA, quisiera más información.');
+MySetUp.ready.then(() => {
+  document.getElementById('wa').href = 'https://wa.me/' + MySetUp.config.whatsapp + '?text=' + encodeURIComponent('Hola MySetUp, quisiera más información.');
   document.getElementById('f').onsubmit = ev => {
     ev.preventDefault(); const m = document.getElementById('m');
-    window.open(waLink('Hola FINORA, soy ' + n.value + ' (' + e.value + '). ' + t.value), '_blank'); m.className = 'msg ok'; m.textContent = 'Se abrió WhatsApp para enviar tu mensaje.'; t.value = '';
+    window.open(waLink('Hola MySetUp, soy ' + n.value + ' (' + e.value + '). ' + t.value), '_blank'); m.className = 'msg ok'; m.textContent = 'Se abrió WhatsApp para enviar tu mensaje.'; t.value = '';
     m.hidden = false;
   };
 });
