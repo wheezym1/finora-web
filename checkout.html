@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finalizar compra · FINORA</title>
+<title>Finalizar compra · MySetUp</title>
 <meta name="description" content="Finaliza tu compra.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,14 +23,14 @@
 <script src="js/app.js"></script>
 <script>
 
-Finora.ready.then(async () => {
+MySetUp.ready.then(async () => {
   const box = document.getElementById('box');
   const cart = Cart.get();
   if (!cart.length) { location.href = 'carrito.html'; return; }
   const prods = [];
   for (const it of cart) { try { prods.push({ p: await api('/api/products/' + it.id), qty: it.qty }); } catch {} }
   const subtotal = prods.reduce((a, r) => a + r.p.price * r.qty, 0);
-  const cfg = Finora.config; const ship = subtotal >= cfg.freeShippingFrom ? 0 : cfg.shippingCost;
+  const cfg = MySetUp.config; const ship = subtotal >= cfg.freeShippingFrom ? 0 : cfg.shippingCost;
   box.innerHTML = `<form class="two" id="f" novalidate>
     <div>
       <div class="panel" style="margin-bottom:20px"><h2>Datos de envío</h2>
@@ -57,7 +57,7 @@ Finora.ready.then(async () => {
     const btn = document.getElementById('go'); btn.disabled = true; btn.textContent = 'Creando pedido…';
     const g = id => document.getElementById(id).value.trim();
     const mth = { yape: 'Yape ' + CONFIG.yape, plin: 'Plin ' + CONFIG.plin, otro: 'Otro medio (a coordinar)' }[document.querySelector('input[name=m]:checked').value];
-    const msg = 'Hola FINORA, quiero hacer este pedido:\n' + prods.map(r => `• ${r.qty} × ${r.p.name} — ${money(r.p.price * r.qty)}`).join('\n') +
+    const msg = 'Hola MySetUp, quiero hacer este pedido:\n' + prods.map(r => `• ${r.qty} × ${r.p.name} — ${money(r.p.price * r.qty)}`).join('\n') +
       `\nEnvío: ${ship ? money(ship) : 'Gratis'}\nTOTAL: ${money(subtotal + ship)}\n\nNombre: ${g('name')}\nTeléfono: ${g('phone')}\nDirección: ${g('address')}, ${g('city')}\nPago: ${mth}`;
     Cart.clear(); btn.disabled = true; btn.textContent = 'Pedido enviado';
     location.href = waLink(msg);
