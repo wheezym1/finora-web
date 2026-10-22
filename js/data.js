@@ -1,4 +1,4 @@
-/* Catálogo de FINORA: edita este archivo para cambiar productos, precios y stock. */
+/* Catálogo de MySetUp: edita este archivo para cambiar productos, precios y stock. */
 const PRODUCTS = [
   {
     "id": 1,
