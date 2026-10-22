@@ -86,7 +86,7 @@ document.addEventListener('click', e => {
 });
 
 /* ---------- Cabecera y pie ---------- */
-const LOGO = '<span class="logo-txt"><b>My</b>SetUp</span>';
+const LOGO = '<span class="logo-txt"><b>KISHI KISHI</b>MIAU MIAU</span>';
 
 function renderChrome(user) {
   const page = location.pathname.replace(/\/$/, '').replace('.html', '') || 'index.html';
