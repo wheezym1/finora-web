@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Finalizar compra · MySetUp</title>
+<title>Finalizar compra · KishiTec</title>
 <meta name="description" content="Finaliza tu compra.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,7 +57,7 @@ MySetUp.ready.then(async () => {
     const btn = document.getElementById('go'); btn.disabled = true; btn.textContent = 'Creando pedido…';
     const g = id => document.getElementById(id).value.trim();
     const mth = { yape: 'Yape ' + CONFIG.yape, plin: 'Plin ' + CONFIG.plin, otro: 'Otro medio (a coordinar)' }[document.querySelector('input[name=m]:checked').value];
-    const msg = 'Hola MySetUp, quiero hacer este pedido:\n' + prods.map(r => `• ${r.qty} × ${r.p.name} — ${money(r.p.price * r.qty)}`).join('\n') +
+    const msg = 'Hola KishiTec, quiero hacer este pedido:\n' + prods.map(r => `• ${r.qty} × ${r.p.name} — ${money(r.p.price * r.qty)}`).join('\n') +
       `\nEnvío: ${ship ? money(ship) : 'Gratis'}\nTOTAL: ${money(subtotal + ship)}\n\nNombre: ${g('name')}\nTeléfono: ${g('phone')}\nDirección: ${g('address')}, ${g('city')}\nPago: ${mth}`;
     Cart.clear(); btn.disabled = true; btn.textContent = 'Pedido enviado';
     location.href = waLink(msg);
