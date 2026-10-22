@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carrito · FINORA</title>
+<title>Carrito · MySetUp</title>
 <meta name="description" content="Revisa tu carrito.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@ async function draw() {
   if (!valid.length) return draw();
   valid.forEach(r => Cart.set(r.p.id, r.qty));
   const subtotal = valid.reduce((a, r) => a + r.p.price * r.qty, 0);
-  const cfg = Finora.config; const ship = subtotal >= cfg.freeShippingFrom ? 0 : cfg.shippingCost;
+  const cfg = MySetUp.config; const ship = subtotal >= cfg.freeShippingFrom ? 0 : cfg.shippingCost;
   box.innerHTML = `<div class="two">
     <div class="panel">${valid.map(({ p, qty }) => `
       <div class="line">
@@ -56,7 +56,7 @@ async function draw() {
   box.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { Cart.set(+b.dataset.p, Math.min(+b.dataset.max, cur(+b.dataset.p) + 1)); draw(); });
   box.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { Cart.set(+b.dataset.r, 0); draw(); });
 }
-Finora.ready.then(draw);
+MySetUp.ready.then(draw);
 
 </script>
 </body>
